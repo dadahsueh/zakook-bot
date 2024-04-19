@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def help_card_msg() -> CardMessage:
-    logger.debug(f"Build help card message")
+    logger.info(f"Build help card message")
     card_msg = CardMessage()
     card = Card(theme=Types.Theme.INFO)
     card.append(Module.Header(f"💩  {settings.BOT_NAME} 使用攻略"))
@@ -33,30 +33,49 @@ def help_card_msg() -> CardMessage:
     return card_msg
 
 
-def rss_card_msg_from_entry(entry) -> CardMessage:
+def exception_card_msg(e: Exception) -> CardMessage:
+    logger.info(f"Build exception card message {e}")
+    card_msg = CardMessage()
+    card = Card(theme=Types.Theme.SECONDARY, size=Types.Size.SM)
+    card.append(Module.Header(f"Oops."))
+    card.append(Module.Context(Element.Text(f"```\n{e}```", type=Types.Text.KMD)))
+    card_msg.append(card)
+    return card_msg
+
+
+def rss_card_msg_from_entry(feed_title, entry) -> CardMessage:
     title = RssUtils.parse_title(entry)
     date = RssUtils.parse_date(entry)
     link = RssUtils.parse_link(entry)
     image = RssUtils.parse_image(entry)
     summary = RssUtils.parse_summary(entry)
     tags = RssUtils.parse_tags(entry)
-    return rss_card_msg(title, date, link, image, summary, tags)
+    return rss_card_msg(feed_title, title, date, link, image, summary, tags)
 
 
-def rss_card_msg(title, date, link, image, summary, tags) -> CardMessage:
-    logger.debug(f"Build RSS card message")
+def rss_card_msg(feed_title, title, date, link, image, summary, tags) -> CardMessage:
+    logger.info(f"Build RSS card message {feed_title} {title} {link} {image}")
     card_msg = CardMessage()
     card = Card(theme=Types.Theme.INFO)
     card.append(Module.Header(f"{title}"))
-    card.append(Module.Context(f"📅  {date}"))
+    if len(date) > 0:
+        card.append(Module.Context(f"{date}"))
     if len(tags) > 0:
         card.append(Module.Context(f"{tags}"))
     card.append(Module.Divider())
-    card.append(
-        Module.Section(Element.Text(summary), Element.Image(image, size=Types.Size.LG), mode=Types.SectionMode.RIGHT))
+    if len(image) > 0:
+        card.append(
+            Module.Section(Element.Text(summary), Element.Image(image, size=Types.Size.LG),
+                           mode=Types.SectionMode.RIGHT))
+    else:
+        card.append(
+            Module.Section(Element.Text(summary)))
     # card.append(
     #     Module.Section(Struct.Paragraph(3, "**昵称**\n怪才君", "**服务器**\n活动中心", "**在线时间**\n9:00-21:00")))
     card.append(
         Module.Section('', Element.Button(text='让我康康', value=link, click=Types.Click.LINK, theme=Types.Theme.INFO)))
+    card.append(Module.Divider())
+    if len(feed_title) > 0:
+        card.append(Module.Context(Element.Text(f"`{feed_title}`", type=Types.Text.KMD)))
     card_msg.append(card)
     return card_msg

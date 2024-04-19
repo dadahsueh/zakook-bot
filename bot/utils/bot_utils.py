@@ -2,13 +2,18 @@
 
 from khl import Bot
 
+from bot.configs.bot_config import settings
+
 logger = logging.getLogger(__name__)
 
 
 class BotUtils(object):
     @staticmethod
-    async def has_admin_and_manage(bot: Bot, user_id, guild_id):
+    async def has_admin_and_manage(bot: Bot, user_id, guild_id) -> bool:
         try:
+            if user_id in settings.admin_users:
+                return True
+
             guild = await bot.client.fetch_guild(guild_id)
             user_roles = (await guild.fetch_user(user_id)).roles
             guild_roles = await (await bot.client.fetch_guild(guild_id)).fetch_roles()

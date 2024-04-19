@@ -31,8 +31,10 @@ class RSSSubscription(Base):
 
     id = Column(Integer, primary_key=True)
     url = Column(String(256), nullable=False)
+    title = Column(String(256), nullable=False) # some has feed.feed.image.url
     update_date = Column(DateTime, default=datetime.now(timezone.utc))
     kook_channels = relationship('RSSKookChannel', secondary=RSSChannelSub, back_populates='rss_subs')
 
-    def __init__(self, url):
+    def __init__(self, url, title):
         self.url = url
+        self.title = title

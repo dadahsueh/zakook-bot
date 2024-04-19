@@ -26,14 +26,31 @@ class RssUtils(object):
         return None
 
     @staticmethod
-    def parse_title(entry: dict):
+    def string_truncate(string, max_length):
+        if len(string) > max_length:
+            return string[:max_length] + '…'
+        else:
+            return string
+
+    @staticmethod
+    def parse_feed_title(feed, max_length=32):
         try:
-            raw_title = entry['plaintitle'] if entry.has_key('plaintitle') else entry[
-                'title'] if entry.has_key('title') else ''
+            if 'feed' not in feed:
+                return ''
+            feed_title = feed.feed.get('title', '')
+            return RssUtils.string_truncate(feed_title, max_length)
+        except Exception as e:
+            logger.exception(f"Failed. {e}", exc_info=False)
+            return ''
+
+    @staticmethod
+    def parse_title(entry: dict, max_length=32):
+        try:
+            raw_title = entry.get('plaintitle', entry.get('title', ''))
             pattern = r'\/[^\/]*\/|\[[^\]]*\]'
             title = re.sub(pattern, '', raw_title)
             title.strip()
-            return title
+            return RssUtils.string_truncate(title, max_length)
         except Exception as e:
             logger.exception(f"Failed. {e}", exc_info=False)
             return ''
@@ -41,9 +58,8 @@ class RssUtils(object):
     @staticmethod
     def parse_date(entry: dict):
         try:
-            if not entry.has_key('published_parsed'):
+            if 'published_parsed' not in entry:
                 return ''
-
             beijing_utc_timedelta = timedelta(hours=8)
             entry_date = datetime.utcfromtimestamp(time.mktime(entry['published_parsed'])) + beijing_utc_timedelta
             date_format = "%Y-%m-%d %H:%M:%S"
@@ -57,7 +73,7 @@ class RssUtils(object):
     @staticmethod
     def parse_link(entry: dict):
         try:
-            if not entry.has_key('link'):
+            if 'link' not in entry:
                 return ''
             link = entry['link']
             return link
@@ -68,10 +84,20 @@ class RssUtils(object):
     @staticmethod
     def parse_image(entry: dict):
         try:
-            if not entry.has_key('summary'):
-                return ''
             pattern = r'https?://\S+?\.(?:jpg|gif|png)'
-            r = re.search(pattern, entry['summary'])
+            image = ''
+            if 'media_thumbnail' in entry:
+                r = re.search(pattern, str(entry['media_thumbnail']))
+                image = r.group(0) if r else ''
+
+            if len(image) != 0:
+                return image
+
+            if 'summary' in entry:
+                r = re.search(pattern, entry['summary'])
+            else:
+                return ''
+
             image = r.group(0) if r else ''
             return image
         except Exception as e:
@@ -79,16 +105,16 @@ class RssUtils(object):
             return ''
 
     @staticmethod
-    def parse_summary(entry: dict):
+    def parse_summary(entry: dict, max_length=256):
         try:
-            if not entry.has_key('summary'):
+            if 'summary' not in entry:
                 return ''
             pattern = r'(?<=<p>).*?(?=<\/p>)'
             r = re.search(pattern, entry['summary'])
             parsed_summary = r.group(0) if r else entry['summary']
             pattern = r'<\/?[^>]+>|<img[^>]+\/?>'
             parsed_summary = re.sub(pattern, '', parsed_summary)
-            return parsed_summary
+            return RssUtils.string_truncate(parsed_summary, max_length)
         except Exception as e:
             logger.exception(f"Failed. {e}", exc_info=False)
             return ''
@@ -96,7 +122,7 @@ class RssUtils(object):
     @staticmethod
     def parse_tags(entry: dict):
         try:
-            if not entry.has_key('title'):
+            if 'title' not in entry:
                 return []
             pattern = r'\/([^\/]*?)\/|\[([^\[\]]*?)\]'
             tags_list = re.findall(pattern, entry['title'])

@@ -6,6 +6,7 @@ from bot.configs.bot_config import settings
 from bot.databases.rss_queries import get_subs_to_notify
 from bot.messages.card_messages_basic import rss_card_msg_from_entry
 from bot.utils.log_utils import BotLogger
+from bot.utils.rss_utils import RssUtils
 
 bot_settings = settings
 logger = logging.getLogger(__name__)
@@ -46,9 +47,10 @@ def reg_rss_task(bot: Bot):
                 logger.info(f"Notifying {channels}.")
                 # parse feed, shorten if too many (some rss feeds are crazy)
                 rss_card_list = []
-                short_feed = feed.entries[:max_entries]
-                for entry in short_feed:
-                    rss_card_list.append(rss_card_msg_from_entry(entry))
+                feed_title = RssUtils.parse_feed_title(feed)
+                latest_entries = feed.entries[:max_entries]
+                for entry in latest_entries:
+                    rss_card_list.append(rss_card_msg_from_entry(feed_title, entry))
 
                 # notify channels
                 for channel_id in channels:

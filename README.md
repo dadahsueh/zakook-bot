@@ -116,6 +116,8 @@ TODO - I have no idea how. Yet.
 - [khl.py: Python SDK for KOOK API](https://github.com/TWT233/khl.py)
 - [Kook-Source-Query Bot](https://github.com/NyaaaDoge/kook-source-query)
 - [Kyouka 镜华 点歌机器人](https://github.com/shuyangzhang/Kyouka/)
+- [RSSHub 万物皆可 RSS](https://docs.rsshub.app/zh/)
 
 ## 💭 Resources <a name = "resources"></a>
+- [Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
 - [Emojipedia](https://emojipedia.org/)
