@@ -16,13 +16,13 @@ def help_card_msg() -> CardMessage:
     card.append(Module.Context(f"版本: {settings.BOT_VERSION}"))
     card.append(Module.Divider())
     help_str = f"""一个没有什么卵用的Bot
-- `/help`: get usage.
-- `/jini`: ping pong check.
-- `/clear`: clears all messages of a text channel.
-- `/rsssub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically posts new entries.
-- `/rssunsub [url]`: unsubscribes the current channel from a rss feed.
-- `/rsslist`: see a list of rss feeds the current channel is subscribed to.
-- `/rssunsuball`: unsubscribes the current channel from all rss feeds.
+`/help`: get usage.
+`/jini`: ping pong check.
+`/clear`: clears all messages of a text channel.
+`/rsssub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically posts new entries.
+`/rssunsub [url]`: unsubscribes the current channel from a rss feed.
+`/rsslist`: see a list of rss feeds the current channel is subscribed to.
+`/rssunsuball`: unsubscribes the current channel from all rss feeds.
 """
     card.append(Module.Section(Element.Text(help_str)))
     card.append(Module.Divider())

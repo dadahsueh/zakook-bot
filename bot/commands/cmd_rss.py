@@ -34,7 +34,7 @@ def reg_rss_cmd(bot: Bot):
 
             feed = await get_feed(url)
             if feed is None or len(feed.entries) == 0:
-                return
+                raise ValueError(f"feed is None or len(feed.entries) == 0")
 
             feed_title = RssUtils.parse_feed_title(feed)
             success = await rss_subscribe(feed_title, url, msg.channel.id, msg.guild.id)

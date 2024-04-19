@@ -112,6 +112,7 @@ TODO - I have no idea how. Yet.
 <sup>Beep boop.</sup>
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+- [khl.py Docs](https://khl-py.eu.org/)
 - [khl.py Examples](https://github.com/TWT233/khl.py/blob/main/example/README.md)
 - [khl.py: Python SDK for KOOK API](https://github.com/TWT233/khl.py)
 - [Kook-Source-Query Bot](https://github.com/NyaaaDoge/kook-source-query)

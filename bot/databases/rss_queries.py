@@ -1,4 +1,5 @@
-﻿import re
+﻿import logging
+import re
 import time
 from datetime import datetime, timezone
 from typing import List
@@ -7,7 +8,11 @@ from feedparser import FeedParserDict
 
 from bot.databases.rss_schema import RSSKookChannel, RSSSubscription
 from bot.databases.sql import get_session
+from bot.utils.log_utils import BotLogger
 from bot.utils.rss_utils import RssUtils
+
+logger = logging.getLogger(__name__)
+cmd_logger = BotLogger(logger)
 
 
 # for testing
@@ -19,47 +24,52 @@ def rss_delete_all():
 
 
 async def rss_subscribe(feed_title, raw_url, channel_id, guild_id) -> bool:
-    url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
-    match = re.search(url_pattern, raw_url)
-    if match is None:
-        return False
-    url = match.group(1)
+    try:
+        url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
+        match = re.search(url_pattern, raw_url)
+        if match is None:
+            raise ValueError(f"could not parse url from > {raw_url}")
+        url = match.group(1)
 
-    session = get_session()
+        session = get_session()
 
-    channel = session.query(RSSKookChannel).filter_by(channel_id=channel_id).first()
-    already_subbed = False
-    commit = False
-    if channel is None:
-        channel = RSSKookChannel(channel_id, guild_id)
-        # add
-        session.add(channel)
-        commit = commit or True
-    else:
-        for sub in channel.rss_subs:
-            if url == sub.url:
-                already_subbed = True
-                break
-
-    if not already_subbed:
-        rss_sub = session.query(RSSSubscription).filter_by(url=url).first()
-        if rss_sub is None:
-            rss_sub = RSSSubscription(url, feed_title)
-            rss_sub.kook_channels.append(channel)
+        channel = session.query(RSSKookChannel).filter_by(channel_id=channel_id).first()
+        already_subbed = False
+        commit = False
+        if channel is None:
+            channel = RSSKookChannel(channel_id, guild_id)
             # add
-            session.add(rss_sub)
+            session.add(channel)
+            commit = commit or True
         else:
-            # associate
-            channel.rss_subs.append(rss_sub)
+            for sub in channel.rss_subs:
+                if url == sub.url:
+                    already_subbed = True
+                    break
 
-        commit = commit or True
+        if not already_subbed:
+            rss_sub = session.query(RSSSubscription).filter_by(url=url).first()
+            if rss_sub is None:
+                rss_sub = RSSSubscription(url, feed_title)
+                rss_sub.kook_channels.append(channel)
+                # add
+                session.add(rss_sub)
+            else:
+                # associate
+                channel.rss_subs.append(rss_sub)
 
-    if commit:
-        session.commit()
-        return True
-    else:
-        # both exist and associated
-        session.close()
+            commit = commit or True
+
+        if commit:
+            session.commit()
+            return True
+        else:
+            # both exist and associated
+            session.close()
+            return False
+
+    except Exception as e:
+        logger.exception(f"Failed subscribe {raw_url}. {e}", exc_info=False)
         return False
 
 
@@ -70,28 +80,27 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
     # all rss subscriptions
     rss_subs = session.query(RSSSubscription).all()
     for sub in rss_subs:
-        channel_id_list = []
-        feed = await RssUtils.parse_feed_with_retry(sub.url)
-        if feed is None or len(feed.entries) == 0:
-            print(f"Failed to parse feed {sub.url}")
-            continue
+        try:
+            channel_id_list = []
+            feed = await RssUtils.parse_feed_with_retry(sub.url)
+            if feed is None or len(feed.entries) == 0:
+                raise ValueError(f"feed is None or len(feed.entries) == 0 for {sub.url}")
 
-        latest_date_parsed = feed.entries[0].get('published_parsed', feed.get('updated_parsed', None))
-        if latest_date_parsed is None:
-            print(f"No dates {sub.url}")
-            continue
+            latest_date_parsed = feed.entries[0].get('published_parsed',
+                                                     feed.get('updated_parsed', feed.feed.get('updated_parsed', '')))
+            if latest_date_parsed is None:
+                raise ValueError(f"latest_date_parsed is None {sub.url}")
 
-        # check if newer than last_update
-        first_entry_date = datetime.utcfromtimestamp(time.mktime(latest_date_parsed))
-        # is new
-        if sub.update_date < first_entry_date:
-            for channel in sub.kook_channels:
-                channel_id_list.append(channel.channel_id)
-            subs_to_notify[feed] = channel_id_list
-            sub.update_date = current_date
-        else:
-            # check next rss
-            continue
+            # check if newer than last_update
+            first_entry_date = datetime.utcfromtimestamp(time.mktime(latest_date_parsed))
+            # is new
+            if sub.update_date < first_entry_date:
+                for channel in sub.kook_channels:
+                    channel_id_list.append(channel.channel_id)
+                subs_to_notify[feed] = channel_id_list
+                sub.update_date = current_date
+        except Exception as e:
+            logger.exception(f"Failed get_subs_to_notify. {e}", exc_info=False)
 
     if len(subs_to_notify) > 0:
         session.commit()
@@ -112,11 +121,15 @@ async def get_rss_list(channel_id) -> List[str]:
 
 
 async def get_feed(raw_url):
-    url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
-    match = re.search(url_pattern, raw_url)
-    if match is None:
-        return None
-    url = match.group(1)
+    try:
+        url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
+        match = re.search(url_pattern, raw_url)
+        if match is None:
+            raise ValueError(f"url match is None for {raw_url}")
+        url = match.group(1)
 
-    feed = await RssUtils.parse_feed_with_retry(url)
-    return feed
+        feed = await RssUtils.parse_feed_with_retry(url)
+        return feed
+    except Exception as e:
+        logger.exception(f"Failed get_subs_to_notify. {e}", exc_info=False)
+        return None
