@@ -31,6 +31,10 @@ def reg_basic_cmd(bot: Bot):
             return
         try:
             cmd_logger.logging_msg(msg)
+            await msg.add_reaction('🐔')
+            await msg.add_reaction('🍐')
+            await msg.add_reaction('🌞')
+            await msg.add_reaction('🍓')
             await msg.reply("实在太美～")
         except Exception as e:
             logger.exception(f"Failed {msg.content} for U:{msg.author_id}. {e}", exc_info=False)

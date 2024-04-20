@@ -30,7 +30,7 @@ class RssUtils(object):
     @staticmethod
     def extract_url(raw_url):
         try:
-            url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
+            url_pattern = r'(https?:\/\/[^\s()\[\]]+)'
             match = re.search(url_pattern, raw_url)
             if match is None:
                 raise ValueError(f"could not parse url from > {raw_url}")

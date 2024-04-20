@@ -43,11 +43,11 @@ To begin exploring:
 - `/help`: get usage.
 - `/jini`: ping pong check.
 - `/clear`: clears all messages of a text channel.
-- `/rsssub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically
+- `/rss sub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically
   posts new entries.
-- `/rssunsub [url]`: unsubscribes the current channel from a rss feed.
-- `/rsslist`: see a list of rss feeds the current channel is subscribed to.
-- `/rssunsuball`: unsubscribes the current channel from all rss feeds.
+- `/rss unsub [url]`: unsubscribes the current channel from a rss feed.
+- `/rss list`: see a list of rss feeds the current channel is subscribed to.
+- `/rss unsub [all/*]` or `/rss unsuball`: unsubscribes the current channel from all rss feeds.
 
 ## 1️⃣ Getting Started <a name = "getting_started"></a>
 

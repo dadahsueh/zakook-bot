@@ -17,12 +17,12 @@ task_logger.create_log_file_by_rotate_handler('bot_tasks.log')
 # reason: because interval get_next_fire_time is called after tasks are scheduled
 #   so start_date=datetime.now() does not start immediately
 # use: when you have some repeating task with long intervals but want the task to run at start
-START_TASK_DELAY = timedelta(seconds=10)
+START_TASK_DELAY = timedelta(seconds=30)
 
 
 # if there are too many tasks, combine tasks with similar intervals
 def reg_basic_task(bot: Bot):
-    @bot.task.add_interval(minutes=1)
+    @bot.task.add_interval(minutes=10)
     async def update_bot_status():
         if settings.lock:
             return None

@@ -12,25 +12,28 @@ This module only builds the card messages
 """
 
 
-def help_card_msg() -> CardMessage:
+def help_card_msg(specification=None) -> CardMessage:
     logger.info(f"Build help card message")
     card_msg = CardMessage()
     card = Card(theme=Types.Theme.INFO)
     card.append(Module.Header(f"💩  {settings.BOT_NAME} 使用攻略"))
-    card.append(Module.Context(f"版本: {settings.BOT_VERSION}"))
+    card.append(Module.Context(f"版本: {settings.BOT_VERSION} | 一个没有什么卵用的Bot"))
     card.append(Module.Divider())
-    help_str = f"""一个没有什么卵用的Bot
-`/help`: get usage.
+    if specification is not None:
+        card.append(
+            Module.Context(Element.Text(f"你干嘛哈哈哎哟", type=Types.Text.KMD)))
+
+    help_str = f"""`/help`: get usage.
 `/jini`: ping pong check.
 `/clear`: clears all messages of a text channel.
-`/rsssub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically posts new entries.
-`/rssunsub [url]`: unsubscribes the current channel from a rss feed.
-`/rsslist`: see a list of rss feeds the current channel is subscribed to.
-`/rssunsuball`: unsubscribes the current channel from all rss feeds.
+`/rss sub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically posts new entries.
+`/rss unsub [url]`: unsubscribes the current channel from a rss feed.
+`/rss list`: see a list of rss feeds the current channel is subscribed to.
+`/rss unsub [all/*]` or `/rss unsuball`: unsubscribes the current channel from all rss feeds.
 """
     card.append(Module.Section(Element.Text(help_str)))
     card.append(Module.Divider())
-    bottom_str = f"""TODO清理屎山。谁来帮我改改🤡
+    bottom_str = f"""TODO 清理屎山 谁来帮我改改 🤡
 """
     card.append(Module.Context(Element.Text(bottom_str)))
     card_msg.append(card)
