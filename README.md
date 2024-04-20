@@ -26,7 +26,9 @@
 
 ## 🧐 About <a name = "about"></a>
 
-For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses `Python v3.11.9` and [khl.py](https://github.com/TWT233/khl.py).
+For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~
+definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses `Python v3.11.9`
+and [khl.py](https://github.com/TWT233/khl.py).
 
 ## 🎈 Usage <a name = "usage"></a>
 
@@ -54,12 +56,15 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 If you need to clone the repo
+
 ```
 git clone https://github.com/dadahsueh/kookie.git
 cd kookie
 mv .env.template .env
 ```
+
 If you do not see it just manually rename `.env.template` to `.env` and configure the `.env`
+
 ```
 TOKEN=BOT_TOKEN_HERE
 
@@ -76,18 +81,19 @@ MUSIC_STATUS=["(私人笑声);赛马娘", ";"]
 
 ### Installing
 
-1. Create activate Python virtual environment
+1. Create activate Python virtual environment or just `python -m venv venv`
 
 ```
 virtualenv venv
 ```
-2. Windows or `.venv/Scripts/activate`
+
+2. Windows POSH
 
 ```
-.venv/Scripts/activate.bat
+./venv/Scripts/activate
 ```
 
-2. Linux/Mac 
+2. Linux / Mac
 
 ```
 source venv/bin/activate
@@ -112,13 +118,15 @@ TODO - I have no idea how. Yet.
 <sup>Beep boop.</sup>
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-- [khl.py Docs](https://khl-py.eu.org/)
-- [khl.py Examples](https://github.com/TWT233/khl.py/blob/main/example/README.md)
+
 - [khl.py: Python SDK for KOOK API](https://github.com/TWT233/khl.py)
 - [Kook-Source-Query Bot](https://github.com/NyaaaDoge/kook-source-query)
 - [Kyouka 镜华 点歌机器人](https://github.com/shuyangzhang/Kyouka/)
-- [RSSHub 万物皆可 RSS](https://docs.rsshub.app/zh/)
 
 ## 💭 Resources <a name = "resources"></a>
+
+- [khl.py Docs](https://khl-py.eu.org/)
+- [khl.py Examples](https://github.com/TWT233/khl.py/blob/main/example/README.md)
 - [Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
 - [Emojipedia](https://emojipedia.org/)
+- [RSSHub 万物皆可 RSS](https://docs.rsshub.app/zh/)

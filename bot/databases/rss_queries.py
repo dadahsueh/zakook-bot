@@ -1,5 +1,4 @@
 ﻿import logging
-import re
 import time
 from datetime import datetime, timezone
 from typing import List
@@ -14,6 +13,10 @@ from bot.utils.rss_utils import RssUtils
 logger = logging.getLogger(__name__)
 cmd_logger = BotLogger(logger)
 
+"""
+This module contains all RSS queries
+"""
+
 
 # for testing
 def rss_delete_all():
@@ -25,11 +28,7 @@ def rss_delete_all():
 
 async def rss_subscribe(feed_title, raw_url, channel_id, guild_id) -> bool:
     try:
-        url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
-        match = re.search(url_pattern, raw_url)
-        if match is None:
-            raise ValueError(f"could not parse url from > {raw_url}")
-        url = match.group(1)
+        url = RssUtils.extract_url(raw_url)
 
         session = get_session()
 
@@ -69,7 +68,7 @@ async def rss_subscribe(feed_title, raw_url, channel_id, guild_id) -> bool:
             return False
 
     except Exception as e:
-        logger.exception(f"Failed subscribe {raw_url}. {e}", exc_info=False)
+        logger.exception(f"Failed subscribe {raw_url}. {e}")
         return False
 
 
@@ -81,15 +80,14 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
     rss_subs = session.query(RSSSubscription).all()
     for sub in rss_subs:
         try:
+            # parse subscription and append
             channel_id_list = []
             feed = await RssUtils.parse_feed_with_retry(sub.url)
-            if feed is None or len(feed.entries) == 0:
-                raise ValueError(f"feed is None or len(feed.entries) == 0 for {sub.url}")
 
             latest_date_parsed = feed.entries[0].get('published_parsed',
                                                      feed.get('updated_parsed', feed.feed.get('updated_parsed', '')))
             if latest_date_parsed is None:
-                raise ValueError(f"latest_date_parsed is None {sub.url}")
+                raise ValueError(f"latest_date_parsed is None for {sub.url}")
 
             # check if newer than last_update
             first_entry_date = datetime.utcfromtimestamp(time.mktime(latest_date_parsed))
@@ -100,7 +98,7 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
                 subs_to_notify[feed] = channel_id_list
                 sub.update_date = current_date
         except Exception as e:
-            logger.exception(f"Failed get_subs_to_notify. {e}", exc_info=False)
+            logger.exception(f"Failed to parse subscription {sub.url}. {e}")
 
     if len(subs_to_notify) > 0:
         session.commit()
@@ -122,14 +120,10 @@ async def get_rss_list(channel_id) -> List[str]:
 
 async def get_feed(raw_url):
     try:
-        url_pattern = r'\((http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)\)'
-        match = re.search(url_pattern, raw_url)
-        if match is None:
-            raise ValueError(f"url match is None for {raw_url}")
-        url = match.group(1)
+        url = RssUtils.extract_url(raw_url)
 
         feed = await RssUtils.parse_feed_with_retry(url)
         return feed
     except Exception as e:
-        logger.exception(f"Failed get_subs_to_notify. {e}", exc_info=False)
-        return None
+        logger.exception(f"Failed get_feed. {e}")
+        raise

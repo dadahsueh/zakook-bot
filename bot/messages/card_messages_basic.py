@@ -7,6 +7,10 @@ from bot.utils.rss_utils import RssUtils
 
 logger = logging.getLogger(__name__)
 
+"""
+This module only builds the card messages
+"""
+
 
 def help_card_msg() -> CardMessage:
     logger.info(f"Build help card message")
@@ -54,7 +58,7 @@ def rss_card_msg_from_entry(feed_title, entry) -> CardMessage:
 
 
 def rss_card_msg(feed_title, title, date, link, image, summary, tags) -> CardMessage:
-    logger.info(f"Build RSS card message {feed_title} {title} {link} {image}")
+    logger.info(f"Build RSS card message {feed_title} {title} {link} {image} {summary}")
     card_msg = CardMessage()
     card = Card(theme=Types.Theme.INFO)
     card.append(Module.Header(f"{title}"))
