@@ -1,24 +1,23 @@
 <h1 align="center">Kookie Bot</h1>
 <p align="center">
-  <img src="/images/screenshot.jpg" style="width: auto; height: 364px;">
+  <img src="images/screenshot.jpg" style="width: auto; height: 364px;">
 </p>
 <div align="center">
 
-![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/kookie?logo=github&style=for-the-badge)
-![Status](https://img.shields.io/badge/status-active-success.svg?style=for-the-badge)
-![Platform](https://img.shields.io/badge/platform-kook-green?style=for-the-badge)
-![github stars](https://img.shields.io/github/stars/dadahsueh/kookie?style=for-the-badge)
+[![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/kookie?logo=github&style=for-the-badge)](https://github.com/dadahsueh/kookie/commits/main/)
+[![Platform](https://img.shields.io/badge/platform-kook-green?style=for-the-badge)](https://www.kookapp.cn/)
+[![Github Stars](https://img.shields.io/github/stars/dadahsueh/kookie?style=for-the-badge)](https://github.com/dadahsueh/kookie)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dadahsueh/kookie?style=for-the-badge)](https://hub.docker.com/r/dadahsueh/kookie)
 
 </div>
 
 ---
 
-<p align="center"> 🤖 Doesn't do much. Simple template bot.
+<p align="center"> 🤖 Simple template KOOK bot. Doesn't do much, does do RSS.
   <br> 
 </p>
 
 ## 📝 Table of Contents
-
 
 - [About](#about)
 - [Usage](#usage)
@@ -27,9 +26,9 @@
 - [Acknowledgments](#acknowledgement)
 - [Resources](#resources)
 
-<img src="/images/in_action.gif" align="right" style="width: auto; height: 354px;padding: 20px 80px 0px 80px;">
 
 ## 🧐 About <a name = "about"></a>
+<img src="images/in_action.gif" align="right" style="width: auto; height: 354px;padding: 0px 80px 0px 80px;">
 
 For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses [`Python v3.11.9`](https://www.python.org/downloads/)
 and [khl.py](https://github.com/TWT233/khl.py). 
@@ -38,6 +37,9 @@ and [khl.py](https://github.com/TWT233/khl.py).
 - [`bot/messages`](bot/messages) - messages and card messages template
 - [`bot/tasks`](bot/tasks) - bot tasks code
 - [`bot/utils`](bot/utils) - utility code
+
+<br>
+<br>
 
 ## 🎈 Usage <a name = "usage"></a>
 
@@ -60,7 +62,7 @@ To begin exploring:
 
 ## 1️⃣ Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing
+These instructions will get you a copy of the project up and running on your ***local*** machine for development and testing
 
 ### Prerequisites
 
@@ -72,7 +74,7 @@ cd kookie
 mv .env.template .env
 ```
 
-If you do not see it just manually rename `.env.template` to `.env` and configure the `.env`
+If you do not see a **.env** file just manually rename `.env.template` to `.env` and or create one with `touch .env`. Then configure the `.env` as like below (substituting for your values)
 
 ```
 TOKEN=BOT_TOKEN_HERE
@@ -90,19 +92,19 @@ MUSIC_STATUS=["(私人笑声);赛马娘", ";"]
 
 ### Installing
 
-1. Create activate Python virtual environment or just `python -m venv venv`
+1. Create Python virtual environment or just `python -m venv venv`
 
 ```
 virtualenv venv
 ```
 
-2. Windows POSH
+2. **Windows POSH** activate venv
 
 ```
 ./venv/Scripts/activate
 ```
 
-2. Linux / Mac
+2. **Linux / Mac**  activate venv
 
 ```
 source venv/bin/activate
@@ -114,7 +116,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Annnnnnnnnnd run
+4. Annnnnnnnnnd run 🎊
 
 ```
 python main.py
@@ -122,9 +124,8 @@ python main.py
 
 ## 🚀 Deploying your own bot <a name = "deployment"></a>
 
-TODO - I have no idea how. Yet.
-
-<sup>Beep boop.</sup>
+### [Docker README](README.Docker.md) <sup><--Goooo.</sup>
+<br>
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
