@@ -61,7 +61,7 @@ def rss_card_msg_from_entry(feed_title, entry) -> CardMessage:
 
 
 def rss_card_msg(feed_title, title, date, link, image, summary, tags) -> CardMessage:
-    logger.info(f"Build RSS card message {feed_title} {title} {link} {image} {summary}")
+    logger.debug(f"Build RSS card message {feed_title} {title} {link} {image} {summary}")
     card_msg = CardMessage()
     card = Card(theme=Types.Theme.INFO)
     card.append(Module.Header(f"{title}"))

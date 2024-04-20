@@ -22,14 +22,20 @@ START_TASK_DELAY = timedelta(seconds=30)
 
 # if there are too many tasks, combine tasks with similar intervals
 def reg_basic_task(bot: Bot):
+    @bot.task.add_date()
+    async def boot_task():
+        logger.info(f"I'm alive!")
+
     @bot.task.add_interval(minutes=10)
     async def update_bot_status():
         if settings.lock:
-            return None
+            return
         else:
             settings.lock = True
 
         try:
+            if len(settings.music_status) == 0:
+                return
             music_parts = settings.music_status[settings.music_status_idx].split(';')
             settings.music_status_idx = (settings.music_status_idx + 1) % len(settings.music_status)
             if music_parts[0] == '':

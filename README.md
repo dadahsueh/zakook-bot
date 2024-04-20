@@ -1,10 +1,12 @@
 <h1 align="center">Kookie Bot</h1>
-
+<p align="center">
+  <img src="/images/screenshot.jpg" style="width: auto; height: 364px;">
+</p>
 <div align="center">
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/kookie?logo=github&style=for-the-badge)
-[![Status](https://img.shields.io/badge/status-active-success.svg?style=for-the-badge)](https://github.com/dadahsueh/kookie)
-[![Platform](https://img.shields.io/badge/platform-kook-green?style=for-the-badge)](https://github.com/dadahsueh/kookie)
+![Status](https://img.shields.io/badge/status-active-success.svg?style=for-the-badge)
+![Platform](https://img.shields.io/badge/platform-kook-green?style=for-the-badge)
 ![github stars](https://img.shields.io/github/stars/dadahsueh/kookie?style=for-the-badge)
 
 </div>
@@ -12,10 +14,11 @@
 ---
 
 <p align="center"> 🤖 Doesn't do much. Simple template bot.
-    <br> 
+  <br> 
 </p>
 
 ## 📝 Table of Contents
+
 
 - [About](#about)
 - [Usage](#usage)
@@ -24,11 +27,17 @@
 - [Acknowledgments](#acknowledgement)
 - [Resources](#resources)
 
+<img src="/images/in_action.gif" align="right" style="width: auto; height: 354px;padding: 20px 80px 0px 80px;">
+
 ## 🧐 About <a name = "about"></a>
 
-For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~
-definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses `Python v3.11.9`
-and [khl.py](https://github.com/TWT233/khl.py).
+For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses [`Python v3.11.9`](https://www.python.org/downloads/)
+and [khl.py](https://github.com/TWT233/khl.py). 
+- [`bot/commands`](bot/commands) - bot command code
+- [`bot/databases`](bot/databases) - database code
+- [`bot/messages`](bot/messages) - messages and card messages template
+- [`bot/tasks`](bot/tasks) - bot tasks code
+- [`bot/utils`](bot/utils) - utility code
 
 ## 🎈 Usage <a name = "usage"></a>
 

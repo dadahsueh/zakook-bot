@@ -99,7 +99,7 @@ class RssUtils(object):
         return image
 
     @staticmethod
-    def parse_summary(entry: dict, max_length=396):
+    def parse_summary(entry: dict, max_length=296):
         if 'summary' not in entry:
             return ''
         pattern = r'(?<=<p>).*?(?=<\/p>)'
@@ -107,6 +107,8 @@ class RssUtils(object):
         parsed_summary = r.group(0) if r else entry['summary']
         pattern = r'<\/?[^>]+>|<img[^>]+\/?>'
         parsed_summary = re.sub(pattern, '', parsed_summary)
+        # prevent consecutive line breaks
+        parsed_summary = re.sub(r'\n{2,}', '\n', parsed_summary)
         return RssUtils.string_truncate(parsed_summary, max_length)
 
     @staticmethod

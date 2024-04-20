@@ -121,7 +121,7 @@ async def rss_subscribe(channel_id, guild_id, *args) -> bool:
                     rss_sub.kook_channels.append(channel)
                     session.add(rss_sub)
                     commited = True
-                elif rss_sub not in channel.rss_sub:
+                elif rss_sub not in channel.rss_subs:
                     # associate
                     channel.rss_subs.append(rss_sub)
                     commited = True
