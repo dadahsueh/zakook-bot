@@ -55,7 +55,7 @@ class RssUtils(object):
         return RssUtils.string_truncate(feed_title, max_length)
 
     @staticmethod
-    def parse_title(entry: dict, max_length=42):
+    def parse_title(entry: dict, max_length=64):
         raw_title = entry.get('plaintitle', entry.get('title', ''))
         pattern = r'\/[^\/]*\/|\[[^\]]*\]'
         title = re.sub(pattern, '', raw_title)
@@ -82,21 +82,20 @@ class RssUtils(object):
 
     @staticmethod
     def parse_image(entry: dict):
-        pattern = r'https?://\S+?\.(?:jpg|gif|png)'
         image = ''
         if 'media_thumbnail' in entry:
-            r = re.search(pattern, str(entry['media_thumbnail']))
-            image = r.group(0) if r else ''
+            r = re.search(r'(https?://\S+?\.(?:jpg|gif|png))', str(entry['media_thumbnail']))
+            image = r.group(1) if r else ''
 
         if len(image) != 0:
             return image
 
         if 'summary' in entry:
-            r = re.search(pattern, entry['summary'])
+            r = re.search(r'(?:<img[^>]*src="([^"]+)"[^>]*\/?>)', entry['summary'])
         else:
             return ''
 
-        image = r.group(0) if r else ''
+        image = r.group(1) if r else ''
         return image
 
     @staticmethod
