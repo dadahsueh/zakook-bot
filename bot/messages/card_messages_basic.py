@@ -19,9 +19,6 @@ def help_card_msg(specification=None) -> CardMessage:
     card.append(Module.Header(f"💩  {settings.BOT_NAME} 使用攻略"))
     card.append(Module.Context(f"版本: {settings.BOT_VERSION} | 一个没有什么卵用的Bot"))
     card.append(Module.Divider())
-    if specification is not None:
-        card.append(
-            Module.Context(Element.Text(f"你干嘛哈哈哎哟", type=Types.Text.KMD)))
 
     help_str = f"""`/help`: get usage.
 `/jini`: ping pong check.
@@ -50,11 +47,13 @@ def exception_card_msg(e: Exception) -> CardMessage:
     return card_msg
 
 
-def rss_card_msg_from_entry(feed_title, entry) -> CardMessage:
+def rss_card_msg_from_entry(feed_title, entry, compatibility_mode=False) -> CardMessage:
     title = RssUtils.parse_title(entry)
     date = RssUtils.parse_date(entry)
     link = RssUtils.parse_link(entry)
-    image = RssUtils.parse_image(entry)
+    image = ''
+    if not compatibility_mode:
+        image = RssUtils.parse_image(entry)
     summary = RssUtils.parse_summary(entry)
     tags = RssUtils.parse_tags(entry)
     return rss_card_msg(feed_title, title, date, link, image, summary, tags)

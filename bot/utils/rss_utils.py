@@ -108,7 +108,7 @@ class RssUtils(object):
         pattern = r'<\/?[^>]+>|<img[^>]+\/?>'
         parsed_summary = re.sub(pattern, '', parsed_summary)
         # prevent consecutive line breaks
-        parsed_summary = re.sub(r'\n{2,}', '\n', parsed_summary)
+        parsed_summary = re.sub(r'[\n\s]+', '\n', parsed_summary)
         return RssUtils.string_truncate(parsed_summary, max_length)
 
     @staticmethod

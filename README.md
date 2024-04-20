@@ -137,6 +137,6 @@ python main.py
 
 - [khl.py Docs](https://khl-py.eu.org/)
 - [khl.py Examples](https://github.com/TWT233/khl.py/blob/main/example/README.md)
+- [Emojisearch](https://www.emojisearch.app/)
 - [Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
-- [Emojipedia](https://emojipedia.org/)
 - [RSSHub 万物皆可 RSS](https://docs.rsshub.app/zh/)

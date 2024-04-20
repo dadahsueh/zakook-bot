@@ -68,7 +68,14 @@ def reg_rss_cmd(bot: Bot):
 
         feed_title = RssUtils.parse_feed_title(feed)
         entry = feed.entries[0]
-        await msg.reply(content=rss_card_msg_from_entry(feed_title, entry), type=MessageTypes.CARD)
+        content = rss_card_msg_from_entry(feed_title, entry)
+        try:
+            await msg.reply(content=content, type=MessageTypes.CARD)
+        except Exception as e:
+            # issue, sometimes the image link leads to 403 or broken, solution remove image
+            logger.info(f"Failed reply, retry compatibility mode. {e}")
+            content = rss_card_msg_from_entry(feed_title, entry, True)
+            await msg.reply(content=content, type=MessageTypes.CARD)
 
     async def un_sub(msg: PublicMessage, *args):
         if len(args) == 0:
