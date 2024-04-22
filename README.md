@@ -1,16 +1,33 @@
-<h1 align="center">Kookie Bot</h1>
+<h1 align="center">🚧Kookie Bot🚧</h1>
+
+<!-- <div align="center">
+
+  [![cn](https://img.shields.io/badge/lang-cn-red?)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.md)
+</div> -->
+
 <p align="center">
   <img src="images/screenshot.jpg" style="width: auto; height: 364px;">
 </p>
 <div align="center">
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/kookie?logo=github&style=for-the-badge)](https://github.com/dadahsueh/kookie/commits/main/)
-[![Platform](https://img.shields.io/badge/platform-kook-green?style=for-the-badge)](https://www.kookapp.cn/)
-[![Github Stars](https://img.shields.io/github/stars/dadahsueh/kookie?style=for-the-badge)](https://github.com/dadahsueh/kookie)
-[![Docker Pulls](https://img.shields.io/docker/pulls/dadahsueh/kookie?style=for-the-badge)](https://hub.docker.com/r/dadahsueh/kookie)
+[![Status](https://img.shields.io/badge/status-wip-yellow?)](https://www.kookapp.cn/)
+[![Platform](https://img.shields.io/badge/platform-kook-green?)](https://www.kookapp.cn/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dadahsueh/kookie?logo=docker&)](https://hub.docker.com/r/dadahsueh/kookie)
+[![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/kookie?logo=github&)](https://github.com/dadahsueh/kookie/commits/main/)
+[![Github Stars](https://img.shields.io/github/stars/dadahsueh/kookie?)](https://github.com/dadahsueh/kookie)
 
 </div>
 
+> - 🚧 WIP, gonna rename the repo
+> - TODOs
+>   - [ ] rename repo (too many similar)
+>   - [ ] multilingual README
+>   - [ ] better parsing
+>   - [ ] command-line arguments
+>   - [ ] fix logger
+>   - [ ] fetch timeout and ping domain before fetch
+>   - [ ] channel logging
+>   - [ ] fix concurrency
 ---
 
 <p align="center"> 🤖 Simple template KOOK bot. Doesn't do much, does do RSS.
