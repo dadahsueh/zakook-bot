@@ -28,6 +28,7 @@
 >   - [ ] fetch timeout and ping domain before fetch
 >   - [ ] channel logging
 >   - [ ] fix concurrency
+>   - [ ] debugging check
 ---
 
 <p align="center"> 🤖 Simple template KOOK bot. Doesn't do much, does do RSS.
