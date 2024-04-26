@@ -1,4 +1,4 @@
-<h1 align="center">🚧Kookie Bot🚧</h1>
+<h1 align="center">🚧Zakook Bot🚧</h1>
 
 <!-- <div align="center">
 
@@ -6,21 +6,21 @@
 </div> -->
 
 <p align="center">
-  <img src="images/screenshot.jpg" style="width: auto; height: 364px;">
+  <img src="images/zakook_sd.png" style="width: auto; height: 364px;">
 </p>
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-wip-yellow?)](https://www.kookapp.cn/)
 [![Platform](https://img.shields.io/badge/platform-kook-green?)](https://www.kookapp.cn/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/dadahsueh/kookie?logo=docker&)](https://hub.docker.com/r/dadahsueh/kookie)
-[![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/kookie?logo=github&)](https://github.com/dadahsueh/kookie/commits/main/)
-[![Github Stars](https://img.shields.io/github/stars/dadahsueh/kookie?)](https://github.com/dadahsueh/kookie)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dadahsueh/zakook-bot?logo=docker&)](https://hub.docker.com/r/dadahsueh/zakook-bot)
+[![GitHub last commit](https://img.shields.io/github/last-commit/dadahsueh/zakook-bot?logo=github&)](https://github.com/dadahsueh/zakook-bot/commits/main/)
+[![Github Stars](https://img.shields.io/github/stars/dadahsueh/zakook-bot?)](https://github.com/dadahsueh/zakook-bot)
 
 </div>
 
 > - 🚧 WIP, gonna rename the repo
 > - TODOs
->   - [ ] rename repo (too many similar)
+>   - [x] rename repo (too many similar)
 >   - [ ] multilingual README
 >   - [ ] better parsing
 >   - [ ] command-line arguments
@@ -46,7 +46,11 @@
 
 
 ## 🧐 About <a name = "about"></a>
-<img src="images/in_action.gif" align="right" style="width: auto; height: 354px;padding: 0px 80px 0px 80px;">
+
+<p align="left">
+  <img src="images/screenshot.jpg" style="width: auto; height: 364px;">
+  <img src="images/in_action.gif" style="width: auto; height: 364px;">
+</p>
 
 For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses [`Python v3.11.9`](https://www.python.org/downloads/)
 and [khl.py](https://github.com/TWT233/khl.py). 
@@ -87,8 +91,8 @@ These instructions will get you a copy of the project up and running on your ***
 If you need to clone the repo
 
 ```
-git clone https://github.com/dadahsueh/kookie.git
-cd kookie
+git clone https://github.com/dadahsueh/zakook-bot.git
+cd zakook-bot
 mv .env.template .env
 ```
 
@@ -97,11 +101,11 @@ If you do not see a **.env** file just manually rename `.env.template` to `.env`
 ```
 TOKEN=BOT_TOKEN_HERE
 
-CONTAINER_NAME=kookie-runner
+CONTAINER_NAME=zakook-bot-runner
 
 ADMIN_USERS=["635507656"]
 
-BOT_NAME=KOOKIE
+BOT_NAME=ZAKOOK
 
 BOT_VERSION=v0.0.1
 

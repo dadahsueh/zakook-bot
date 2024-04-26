@@ -11,12 +11,11 @@ class BotSettings(BaseSettings):
     Will read from ENV values on Docker
     """
     token: str = ''
-    container_name: str = 'kookie-runner'
+    container_name: str = 'zakook-runner'
     admin_users: List[str] = []
 
-    BOT_NAME: str = 'KOOKIE'
+    BOT_NAME: str = 'ZAKOOK'
     BOT_VERSION: str = 'v0.0.1'
-    LOG_LEVEL: ClassVar = logging.INFO
 
     music_status: List[str] = []
     music_status_idx: int = 0

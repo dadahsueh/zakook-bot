@@ -1,6 +1,6 @@
-# `docker pull dadahsueh/kookie`
+# `docker pull dadahsueh/zakook-bot`
 
-#### [Kookie Docker Image](https://hub.docker.com/r/dadahsueh/kookie)
+#### [Zakook Docker Image](https://hub.docker.com/r/dadahsueh/zakook-bot)
 
 
 ## 📝 Table of Contents
@@ -17,17 +17,17 @@ Need the `.env` file or manually enter `--env xxx=xxx`
 
 If you want to clone the repo or you can just `touch .env` at the working directory:
 ```
-git clone https://github.com/dadahsueh/kookie.git
-cd kookie
+git clone https://github.com/dadahsueh/zakook-bot.git
+cd zakook-bot
 mv .env.template .env
 ```
 
 Configure the `.env` if you are want to use the `--env-file` method
 ```
 TOKEN=BOT_TOKEN_HERE
-CONTAINER_NAME=kookie-runner
+CONTAINER_NAME=zakook-bot-runner
 ADMIN_USERS=["635507656"]
-BOT_NAME=KOOKIE
+BOT_NAME=ZAKOOK
 BOT_VERSION=v0.0.1
 MUSIC_STATUS=[";"]
 ```
@@ -36,16 +36,16 @@ MUSIC_STATUS=[";"]
 
 Pull the docker image
 ```
-docker pull dadahsueh/kookie
+docker pull dadahsueh/zakook-bot
 ```
 
 use configured file
 ```
-docker run -i --env-file .env --name kookie-container kookie
+docker run -i --env-file .env --name zakook-bot-container zakook-bot
 ```
 or manually set `--env xxx=xxx` or short `-e xxx=xxx`
 ```
-docker run -i --env TOKEN=Your_Token_Here --name kookie-container kookie
+docker run -i --env TOKEN=Your_Token_Here --name zakook-bot-container zakook-bot
 ```
 
 optional `--restart always`, for more info check [Docker Manual](https://docs.docker.com/manuals/).
@@ -54,13 +54,13 @@ optional `--restart always`, for more info check [Docker Manual](https://docs.do
 
 Clone git repo
 ```
-git clone https://github.com/dadahsueh/kookie.git
-cd kookie
+git clone https://github.com/dadahsueh/zakook-bot.git
+cd zakook-bot
 mv .env.template .env
 ```
 Build
 ```
-docker build --no-cache=true -t kookie:latest .
+docker build --no-cache=true -t zakook-bot:latest .
 ```
 Then go see [Running](#running) if you want to run the bot.
 
@@ -69,15 +69,15 @@ Then go see [Running](#running) if you want to run the bot.
 ### (Optional) Push tag
 if you want to push to a docker repo, rename to your repo:tag
 ```
-docker image tag kookie:latest dadahsueh/kookie:latest
+docker image tag zakook-bot:latest dadahsueh/zakook-bot:latest
 ```
 push to your repo:tag
 ```
-docker push dadahsueh/kookie:latest
+docker push dadahsueh/zakook-bot:latest
 ```
 remove image with old name
 ```
-docker rmi kookie
+docker rmi zakook-bot
 ```
 
 <br>
