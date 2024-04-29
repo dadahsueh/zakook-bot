@@ -6,7 +6,7 @@ from khl import Bot, MessageTypes
 from bot.configs.bot_config import settings
 from bot.databases.rss_queries import get_subs_to_notify
 from bot.messages.card_messages_basic import rss_card_msg_from_entry
-from bot.utils.log_utils import BotLogger
+from bot.utils.bot_utils import BotLogger
 from bot.utils.rss_utils import RssUtils
 
 bot_settings = settings
@@ -65,6 +65,7 @@ def reg_rss_task(bot: Bot):
                     # parse feed, shorten if too long (some rss feeds are crazy)
                     feed_title = RssUtils.parse_feed_title(feed)
                     latest_entries = feed.entries[:max_entries]
+                    latest_entries.reverse()
                     for entry in latest_entries:
                         rss_card_list.append(rss_card_msg_from_entry(feed_title, entry))
                 except Exception as e:

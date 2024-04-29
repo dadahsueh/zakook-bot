@@ -7,7 +7,7 @@ from khl import Bot, Message, MessageTypes, PublicMessage
 from bot.configs.bot_config import settings
 from bot.messages.card_messages_basic import help_card_msg
 from bot.utils.bot_utils import BotUtils
-from bot.utils.log_utils import BotLogger
+from bot.utils.bot_utils import BotLogger
 
 bot_settings = settings
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ def reg_basic_cmd(bot: Bot):
         if not isinstance(msg, PublicMessage):
             return
         try:
-            cmd_logger.logging_msg(msg)
+            cmd_logger.log_msg(msg)
             await msg.reply(content=help_card_msg(), type=MessageTypes.CARD)
         except Exception as e:
             logger.exception(f"Failed {msg.content} for U:{msg.author_id}. {e}", exc_info=False)
@@ -30,7 +30,7 @@ def reg_basic_cmd(bot: Bot):
         if not isinstance(msg, PublicMessage):
             return
         try:
-            cmd_logger.logging_msg(msg)
+            cmd_logger.log_msg(msg)
             await msg.add_reaction('🐔')
             await msg.add_reaction('🍐')
             await msg.add_reaction('🌞')
@@ -51,7 +51,7 @@ def reg_basic_cmd(bot: Bot):
             perm = await perm_util.has_admin_and_manage(bot, msg.author_id, current_channel_guild_id)
         if perm:
             try:
-                cmd_logger.logging_msg(msg)
+                cmd_logger.log_msg(msg)
                 await bot.client.add_reaction(msg, '👌')
                 await asyncio.sleep(2)
                 msgs_dict = await msg.channel.list_messages()

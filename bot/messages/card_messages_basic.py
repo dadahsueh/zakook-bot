@@ -20,18 +20,19 @@ def help_card_msg(specification=None) -> CardMessage:
     card.append(Module.Context(f"版本: {settings.BOT_VERSION} | 一个没有什么卵用的Bot"))
     card.append(Module.Divider())
 
-    help_str = f"""`/help`: get usage.
-`/jini`: ping pong check.
-`/clear`: clears all messages of a text channel.
-`/rss sub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically posts new entries.
-`/rss unsub [url]`: unsubscribes the current channel from a rss feed.
-`/rss list`: see a list of rss feeds the current channel is subscribed to.
-`/rss unsub [all/*]` or `/rss unsuball`: unsubscribes the current channel from all rss feeds.
-"""
+    help_str = ""
+    help_str += f"`/help`: get usage.\n"
+    help_str += f"`/jini`: ping pong check.\n"
+    help_str += f"`/clear`: clears all messages of a text channel.\n"
+    help_str += f"`/rss sub [url]`: subscribes the current channel to a rss feed, immediately posts the newest entry and periodically posts new entries.\n"
+    help_str += f"`/rss unsub [url]`: unsubscribes the current channel from a rss feed.\n"
+    help_str += f"`/rss list`: see a list of rss feeds the current channel is subscribed to.\n"
+    help_str += f"`/rss unsub [all/*]` or `/rss unsuball`: unsubscribes the current channel from all rss feeds.\n"
+
     card.append(Module.Section(Element.Text(help_str)))
     card.append(Module.Divider())
-    bottom_str = f"""TODO 清理屎山 谁来帮我改改 🤡
-"""
+
+    bottom_str = f"TODO 清理屎山 谁来帮我改改 🤡"
     card.append(Module.Context(Element.Text(bottom_str)))
     card_msg.append(card)
     return card_msg
@@ -62,7 +63,7 @@ def rss_card_msg_from_entry(feed_title, entry, compatibility_mode=False) -> Card
 def rss_card_msg(feed_title, title, date, link, image, summary, tags) -> CardMessage:
     logger.debug(f"Build RSS card message {feed_title} {title} {link} {image} {summary}")
     card_msg = CardMessage()
-    card = Card(theme=Types.Theme.INFO)
+    card = Card(color=RssUtils.color_code_from_string(feed_title))
     card.append(Module.Header(f"{title}"))
     if len(date) > 0:
         card.append(Module.Context(f"{date}"))
@@ -70,14 +71,16 @@ def rss_card_msg(feed_title, title, date, link, image, summary, tags) -> CardMes
         card.append(Module.Context(f"{tags}"))
     card.append(Module.Divider())
     if len(image) > 0:
-        card.append(
-            Module.Section(Element.Text(summary), Element.Image(image, size=Types.Size.LG),
-                           mode=Types.SectionMode.RIGHT))
+        if len(summary) > 0:
+            card.append(
+                Module.Section(Element.Text(summary), Element.Image(image, size=Types.Size.LG),
+                               mode=Types.SectionMode.RIGHT))
+        else:
+            card.append(
+                Module.Container(Element.Image(src=image)))
     else:
         card.append(
             Module.Section(Element.Text(summary)))
-    # card.append(
-    #     Module.Section(Struct.Paragraph(3, "**昵称**\n怪才君", "**服务器**\n活动中心", "**在线时间**\n9:00-21:00")))
     card.append(
         Module.Section('', Element.Button(text='让我康康', value=link, click=Types.Click.LINK, theme=Types.Theme.INFO)))
     card.append(Module.Divider())

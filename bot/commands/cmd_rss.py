@@ -5,8 +5,8 @@ from khl import Bot, Message, MessageTypes, PublicMessage
 from bot.configs.bot_config import settings
 from bot.databases.rss_queries import get_feed, get_rss_list, rss_subscribe, rss_unsubscribe
 from bot.messages.card_messages_basic import exception_card_msg, help_card_msg, rss_card_msg_from_entry
+from bot.utils.bot_utils import BotLogger
 from bot.utils.bot_utils import BotUtils
-from bot.utils.log_utils import BotLogger
 from bot.utils.rss_utils import RssUtils
 
 bot_settings = settings
@@ -44,7 +44,7 @@ def reg_rss_cmd(bot: Bot):
             else:
                 await rss_help(msg, *args)
 
-            cmd_logger.logging_msg(msg)
+            cmd_logger.log_msg(msg)
         except Exception as e:
             await msg.reply(content=exception_card_msg(e), type=MessageTypes.CARD)
             logger.exception(f"Failed {msg.content} for U:{msg.author_id}. {e}")
@@ -63,6 +63,9 @@ def reg_rss_cmd(bot: Bot):
 
         url = args[0]
         feed = await get_feed(url)
+        # Check if the feed was parsed successfully
+        if feed.bozo:
+            logger.error(f"Feed is bozo {url}. {feed}")
         if feed is None or len(feed.entries) == 0:
             raise ValueError(f"feed is None or len(feed.entries) == 0")
 
@@ -70,6 +73,7 @@ def reg_rss_cmd(bot: Bot):
         entry = feed.entries[0]
         content = rss_card_msg_from_entry(feed_title, entry)
         try:
+            await msg.add_reaction('🆗')
             await msg.reply(content=content, type=MessageTypes.CARD)
         except Exception as e:
             # issue, sometimes the image link leads to 403 or broken, solution remove image

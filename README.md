@@ -18,17 +18,9 @@
 
 </div>
 
-> - 🚧 WIP, gonna rename the repo
 > - TODOs
->   - [x] rename repo (too many similar)
->   - [ ] multilingual README
->   - [ ] better parsing
->   - [ ] command-line arguments
->   - [ ] fix logger
->   - [ ] fetch timeout and ping domain before fetch
 >   - [ ] channel logging
 >   - [ ] fix concurrency
->   - [ ] debugging check
 ---
 
 <p align="center"> 🤖 Simple template KOOK bot. Doesn't do much, does do RSS.
@@ -96,7 +88,8 @@ cd zakook-bot
 mv .env.template .env
 ```
 
-If you do not see a **.env** file just manually rename `.env.template` to `.env` and or create one with `touch .env`. Then configure the `.env` as like below (substituting for your values)
+If you do not see a **.env** file just manually rename `.env.template` to `.env` and or create one with `touch .env`. Then configure the `.env` as like below (substituting for your values).
+You could also run with `python main.py -t YOUR_TOKEN`.
 
 ```
 TOKEN=BOT_TOKEN_HERE
@@ -143,6 +136,7 @@ pip install -r requirements.txt
 ```
 python main.py
 ```
+You can also try running with arguments `-t TOKEN` or `--token TOKEN`, and `-v` `-vv` for verbosity changes. Which would look like `python main.py -t TOKEN -vv`
 
 ## 🚀 Deploying your own bot <a name = "deployment"></a>
 

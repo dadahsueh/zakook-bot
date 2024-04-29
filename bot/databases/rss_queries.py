@@ -7,7 +7,7 @@ from feedparser import FeedParserDict
 
 from bot.databases.rss_schema import RSSKookChannel, RSSSubscription
 from bot.databases.sql import get_session
-from bot.utils.log_utils import BotLogger
+from bot.utils.bot_utils import BotLogger
 from bot.utils.rss_utils import RssUtils
 
 logger = logging.getLogger(__name__)
@@ -37,6 +37,13 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
                 # parse subscription and append
                 channel_id_list = []
                 feed = await RssUtils.parse_feed_with_retry(sub.url)
+
+                # Check if the feed was parsed successfully
+                if feed.bozo:
+                    logger.error(f"Feed is bozo {sub.url}. {feed}")
+
+                if feed is None or len(feed.entries) == 0:
+                    raise ValueError(f"feed is None or len(feed.entries) == 0")
 
                 latest_date_parsed = feed.entries[0].get('published_parsed',
                                                          feed.get('updated_parsed',
@@ -112,6 +119,10 @@ async def rss_subscribe(channel_id, guild_id, *args) -> bool:
                 rss_sub = session.query(RSSSubscription).filter_by(url=url).first()
                 if rss_sub is None:
                     feed = await get_feed(url)
+                    # Check if the feed was parsed successfully
+                    if feed.bozo:
+                        logger.error(f"Feed is bozo {url}. {feed}")
+
                     if feed is None or len(feed.entries) == 0:
                         raise ValueError(f"feed is None or len(feed.entries) == 0")
 

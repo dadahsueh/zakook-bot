@@ -1,15 +1,45 @@
 ﻿import asyncio
+import hashlib
 import logging
 import re
 import time
 from datetime import datetime, timedelta
 
 import feedparser
+import html2text
+import ping3
 
 logger = logging.getLogger(__name__)
 
 
 class RssUtils(object):
+    @staticmethod
+    async def is_host_reachable(host):
+        try:
+            host = host.split('//')[1].split('/')[0]
+            # Perform ICMP ping to check host reachability
+            if ping3.ping(host, timeout=2) is not None:
+                return True
+        except Exception as e:
+            raise ValueError(f"Failed to ping {host} {e}")
+        return False
+
+    @staticmethod
+    def color_code_from_string(string_text):
+        color_code = '#4169E1'
+        try:
+            hash_value = hashlib.md5(string_text.encode()).hexdigest()
+            # Extract RGB components from the hash value
+            red = int(hash_value[0:2], 16)   # Use first two characters as red component
+            green = int(hash_value[2:4], 16) # Use next two characters as green component
+            blue = int(hash_value[4:6], 16)  # Use last two characters as blue component
+
+            # Format as hex color code (#RRGGBB)
+            color_code = f'#{red:02x}{green:02x}{blue:02x}'
+        except Exception as e:
+            logger.error(e)
+        return color_code
+
     @staticmethod
     async def parse_feed_with_retry(url, max_retries=3, retry_delay=1):
         for attempt in range(max_retries):
@@ -90,25 +120,37 @@ class RssUtils(object):
         if len(image) != 0:
             return image
 
+        if 'content' in entry and len(entry['content']) > 0:
+            r = re.search(r'(?:<img[^>]*src="([^"]+)"[^>]*\/?>)', entry['content'][0].value)
+            image = r.group(1) if r else ''
+
+        if len(image) != 0:
+            return image
+
         if 'summary' in entry:
             r = re.search(r'(?:<img[^>]*src="([^"]+)"[^>]*\/?>)', entry['summary'])
-        else:
-            return ''
+            image = r.group(1) if r else ''
 
-        image = r.group(1) if r else ''
         return image
 
     @staticmethod
     def parse_summary(entry: dict, max_length=296):
-        if 'summary' not in entry:
-            return ''
-        pattern = r'(?<=<p>).*?(?=<\/p>)'
-        r = re.search(pattern, entry['summary'])
-        parsed_summary = r.group(0) if r else entry['summary']
-        pattern = r'<\/?[^>]+>|<img[^>]+\/?>'
-        parsed_summary = re.sub(pattern, '', parsed_summary)
-        # prevent consecutive line breaks
-        parsed_summary = re.sub(r'[\n\s]+', '\n', parsed_summary)
+        h = html2text.HTML2Text()
+        h.ignore_links = True
+        h.bypass_tables = False
+        h.ignore_images = True
+        h.images_to_alt = True
+        parsed_summary = ''
+        if 'content' in entry and len(entry['content']) > 0:
+            parsed_summary = h.handle(entry['content'][0].value)
+
+        if len(parsed_summary) == 0:
+            if 'summary_detail' in entry and len(entry['summary_detail']) > 0:
+                parsed_summary = h.handle(entry['summary_detail'].value)
+            if len(parsed_summary) == 0 and 'summary' in entry:
+                parsed_summary = h.handle(entry['summary'].value)
+
+        parsed_summary = re.sub(r'\n\n+', '\n', parsed_summary)
         return RssUtils.string_truncate(parsed_summary, max_length)
 
     @staticmethod
