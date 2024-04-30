@@ -28,6 +28,9 @@ def rss_delete_all():
 
 
 async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
+    """
+    Could have SQLite concurrency issues, very slow
+    """
     with get_session() as session:
         current_date = datetime.now(timezone.utc)
         subs_to_notify = {}

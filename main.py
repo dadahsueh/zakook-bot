@@ -36,6 +36,7 @@ logger = logging.getLogger(settings.BOT_NAME)
 
 logging.basicConfig(level=log_level, format='%(asctime)s -%(name)-24s:%(levelname)-8s-%(message)s')
 logger.info(f'{settings.BOT_NAME} version {settings.BOT_VERSION} {log_level}')
+logger.debug(f'Config >> {settings.model_dump()}')
 
 # Configure Cloudflare Worker
 # Arguments first, fallback ENV Settings

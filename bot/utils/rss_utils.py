@@ -2,6 +2,7 @@
 import hashlib
 import logging
 import re
+import socket
 import time
 from datetime import datetime, timedelta
 
@@ -12,6 +13,11 @@ import ping3
 from bot.configs.bot_config import settings
 
 logger = logging.getLogger(__name__)
+# Set a timeout value in seconds
+timeout_seconds = 4
+
+# Set the default timeout for all socket operations
+socket.setdefaulttimeout(timeout_seconds)
 
 
 class RssUtils(object):
@@ -20,7 +26,7 @@ class RssUtils(object):
         try:
             host = host.split('//')[1].split('/')[0]
             # Perform ICMP ping to check host reachability
-            if ping3.ping(host, timeout=2) is not None:
+            if ping3.ping(host, timeout=timeout_seconds) is not None:
                 return True
         except Exception as e:
             raise ValueError(f"Failed to ping {host} {e}")
@@ -63,16 +69,16 @@ class RssUtils(object):
                 feed = feedparser.parse(feed_url)
 
                 if feed is None or len(feed.entries) == 0:
-                    raise ValueError(f"Feed is None or len(feed.entries) == 0 for {feed_url}")
+                    raise ValueError(f"Feed is None or len(feed.entries) == 0 for {settings.cf_enabled} >> {feed_url}")
 
-                logger.debug(f"Returned on attempt {attempt + 1} using {feed_url}")
+                logger.debug(f"Returned on attempt {attempt + 1} using {settings.cf_enabled} >> {feed_url}")
                 return feed
             except Exception as e:
-                logger.debug(f"Attempt {attempt + 1} failed using {feed_url}: {e}")
+                logger.debug(f"Attempt {attempt + 1} failed using {settings.cf_enabled} >> {feed_url}: {e}")
                 if not is_last_attempt:
                     await asyncio.sleep(retry_delay)
 
-        raise ValueError(f"All retries failed to parse {feed_url}")
+        raise ValueError(f"All retries failed to parse {settings.cf_enabled} >> {feed_url}")
 
     @staticmethod
     def extract_url(raw_url):
