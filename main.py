@@ -27,12 +27,10 @@ parser.add_argument('-cf', type=str, help='Cloudflare Worker url (e.g. https://x
 args = parser.parse_args()
 
 # Configure logging
-log_level = logging.WARNING
+log_level = logging.INFO
 
-if debugger_is_active or args.verbose >= 2:
+if debugger_is_active() or args.verbose >= 1:
     log_level = logging.DEBUG
-elif args.verbose == 1:
-    log_level = logging.INFO
 
 logger = logging.getLogger(settings.BOT_NAME)
 

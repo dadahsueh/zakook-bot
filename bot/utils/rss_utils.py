@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 class RssUtils(object):
     @staticmethod
-    async def is_host_reachable(host):
+    def is_host_reachable(host):
         try:
             host = host.split('//')[1].split('/')[0]
             # Perform ICMP ping to check host reachability
@@ -49,27 +49,30 @@ class RssUtils(object):
         """
         # Why use with retry if max is 1?
         max_retries = max(max_retries, 2)
+        feed_url = url
 
         for attempt in range(max_retries):
             is_last_attempt = attempt == max_retries - 1
             try:
                 use_cf = settings.cf_enabled and (settings.cf_priority == (not is_last_attempt))
                 if use_cf:
-                    worker_request_url = f'{settings.cf}?url={url}'
-                    feed = feedparser.parse(worker_request_url)
+                    feed_url = f'{settings.cf}?url={url}'
                 else:
-                    feed = feedparser.parse(url)
+                    feed_url = url
+
+                feed = feedparser.parse(feed_url)
 
                 if feed is None or len(feed.entries) == 0:
-                    raise ValueError(f"Feed is None or len(feed.entries) == 0 for {use_cf} >> {url}")
+                    raise ValueError(f"Feed is None or len(feed.entries) == 0 for {feed_url}")
 
+                logger.debug(f"Returned on attempt {attempt + 1} using {feed_url}")
                 return feed
             except Exception as e:
-                logger.debug(f"Attempt {attempt + 1} failed: {e}")
+                logger.debug(f"Attempt {attempt + 1} failed using {feed_url}: {e}")
                 if not is_last_attempt:
                     await asyncio.sleep(retry_delay)
 
-        raise ValueError(f"All retries failed to parse {url}")
+        raise ValueError(f"All retries failed to parse {feed_url}")
 
     @staticmethod
     def extract_url(raw_url):

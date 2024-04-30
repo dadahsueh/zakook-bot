@@ -113,6 +113,7 @@ async def rss_subscribe(channel_id, guild_id, *args) -> RSSSubscribeResult:
     :return: True if subscribed by this call, False if already subbed
     """
     commited = False
+    feed = None
     with get_session() as session:
         subscribe_list = []
         channel = session.query(RSSKookChannel).filter_by(channel_id=channel_id).first()

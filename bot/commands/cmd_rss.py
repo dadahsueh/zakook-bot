@@ -75,7 +75,7 @@ def reg_rss_cmd(bot: Bot):
             await msg.reply(content=content, type=MessageTypes.CARD)
         except Exception as e:
             # issue, sometimes the image link leads to 403 or broken, solution remove image
-            logger.info(f"Failed reply, retry compatibility mode. {e}")
+            logger.warning(f"Failed reply, retry compatibility mode. {e}")
             content = rss_card_msg_from_entry(feed_title, entry, True)
             await msg.reply(content=content, type=MessageTypes.CARD)
 
