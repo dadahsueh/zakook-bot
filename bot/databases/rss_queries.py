@@ -1,5 +1,6 @@
 ﻿import logging
 import time
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import List
 
@@ -68,10 +69,20 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
     return subs_to_notify
 
 
+async def get_all_rss_list() -> List[str]:
+    str_list = []
+    with get_session() as session:
+        rss_subs = session.query(RSSSubscription).all()
+        if rss_subs:
+            for sub in rss_subs:
+                str_list.append(sub.url)
+    return str_list
+
+
 async def get_rss_list(channel_id) -> List[str]:
+    str_list = []
     with get_session() as session:
         channel = session.query(RSSKookChannel).filter_by(channel_id=channel_id).first()
-        str_list = []
         if channel:
             for sub in channel.rss_subs:
                 str_list.append(sub.url)
@@ -89,7 +100,12 @@ async def get_feed(raw_url):
         raise
 
 
-async def rss_subscribe(channel_id, guild_id, *args) -> bool:
+@dataclass
+class RSSSubscribeResult:
+    success: bool
+    feed: str
+
+async def rss_subscribe(channel_id, guild_id, *args) -> RSSSubscribeResult:
     """
     :param channel_id:
     :param guild_id:
@@ -141,7 +157,7 @@ async def rss_subscribe(channel_id, guild_id, *args) -> bool:
 
         if commited:
             session.commit()
-    return commited
+    return RSSSubscribeResult(commited, feed)
 
 
 async def rss_unsubscribe(channel_id, *args) -> bool:

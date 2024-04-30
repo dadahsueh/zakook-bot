@@ -25,11 +25,18 @@ mv .env.template .env
 Configure the `.env` if you are want to use the `--env-file` method
 ```
 TOKEN=BOT_TOKEN_HERE
+
 CONTAINER_NAME=zakook-bot-runner
+
 ADMIN_USERS=["635507656"]
+
 BOT_NAME=ZAKOOK
+
 BOT_VERSION=v0.0.1
+
 MUSIC_STATUS=[";"]
+
+CF=
 ```
 
 ## 🎈 Running <a name = "running"></a>
@@ -43,12 +50,17 @@ use configured file
 ```
 docker run -i --env-file .env --name zakook-bot-container zakook-bot
 ```
-or manually set `--env xxx=xxx` or short `-e xxx=xxx`
+or set it in the ***Hub app*** or manually set `--env xxx=xxx` or short `-e xxx=xxx`
 ```
-docker run -i --env TOKEN=Your_Token_Here --name zakook-bot-container zakook-bot
+docker run -i --env token=Your_Token_Here --name zakook-bot-container zakook-bot
 ```
 
 optional `--restart always`, for more info check [Docker Manual](https://docs.docker.com/manuals/).
+
+If you want to set a Cloudflare Worker, also check [Cloudflare Worker README](README.Worker.md).
+```
+docker run -i -e token=Your_Token_Here -e cf=https://xxxworker.xxxname.workers.dev/ zakook-bot
+```
 
 ## 🔨 Building <a name = "building"></a>
 

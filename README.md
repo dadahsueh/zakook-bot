@@ -36,7 +36,6 @@
 - [Acknowledgments](#acknowledgement)
 - [Resources](#resources)
 
-
 ## 🧐 About <a name = "about"></a>
 
 <p align="left">
@@ -44,8 +43,10 @@
   <img src="images/in_action.gif" style="width: auto; height: 364px;">
 </p>
 
-For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses [`Python v3.11.9`](https://www.python.org/downloads/)
-and [khl.py](https://github.com/TWT233/khl.py). 
+For educational purposes. ~~Good clean code~~. The bot is intended for Kook, can subscribe to RSS feeds, and ~~
+definitely~~ ~~probably~~ ~~plausibly~~ maybe scalable. Uses [`Python v3.11.9`](https://www.python.org/downloads/)
+and [khl.py](https://github.com/TWT233/khl.py).
+
 - [`bot/commands`](bot/commands) - bot command code
 - [`bot/databases`](bot/databases) - database code
 - [`bot/messages`](bot/messages) - messages and card messages template
@@ -73,10 +74,12 @@ To begin exploring:
 - `/rss unsub [url]`: unsubscribes the current channel from a rss feed.
 - `/rss list`: see a list of rss feeds the current channel is subscribed to.
 - `/rss unsub [all/*]` or `/rss unsuball`: unsubscribes the current channel from all rss feeds.
+- `/rss dump`: dumps all rss links.
 
 ## 1️⃣ Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your ***local*** machine for development and testing
+These instructions will get you a copy of the project up and running on your ***local*** machine for development and
+testing
 
 ### Prerequisites
 
@@ -88,7 +91,8 @@ cd zakook-bot
 mv .env.template .env
 ```
 
-If you do not see a **.env** file just manually rename `.env.template` to `.env` and or create one with `touch .env`. Then configure the `.env` as like below (substituting for your values).
+If you do not see a **.env** file just manually rename `.env.template` to `.env` and or create one with `touch .env`.
+Then configure the `.env` as like below (substituting for your values).
 You could also run with `python main.py -t YOUR_TOKEN`.
 
 ```
@@ -103,6 +107,8 @@ BOT_NAME=ZAKOOK
 BOT_VERSION=v0.0.1
 
 MUSIC_STATUS=["(私人笑声);赛马娘", ";"]
+
+CF=
 ```
 
 ### Installing
@@ -136,11 +142,17 @@ pip install -r requirements.txt
 ```
 python main.py
 ```
-You can also try running with arguments `-t TOKEN` or `--token TOKEN`, and `-v` `-vv` for verbosity changes. Which would look like `python main.py -t TOKEN -vv`
+
+You can also try running with arguments `-t TOKEN` or `--token TOKEN`, and `-v` `-vv` for verbosity changes. Which would
+look like `python main.py -t TOKEN -vv`
+
+Also also try `-cf https://xxxworker.xxxname.workers.dev/` to configure a [Cloudflare Worker](README.Worker.md)
 
 ## 🚀 Deploying your own bot <a name = "deployment"></a>
 
 ### [Docker README](README.Docker.md) <sup><--Goooo.</sup>
+### [Cloudflare Worker README](README.Worker.md) <sup><--For RSSHub.</sup>
+
 <br>
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>

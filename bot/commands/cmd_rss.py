@@ -3,7 +3,7 @@
 from khl import Bot, Message, MessageTypes, PublicMessage
 
 from bot.configs.bot_config import settings
-from bot.databases.rss_queries import get_feed, get_rss_list, rss_subscribe, rss_unsubscribe
+from bot.databases.rss_queries import get_all_rss_list, get_feed, get_rss_list, rss_subscribe, rss_unsubscribe
 from bot.messages.card_messages_basic import exception_card_msg, help_card_msg, rss_card_msg_from_entry
 from bot.utils.bot_utils import BotLogger
 from bot.utils.bot_utils import BotUtils
@@ -21,10 +21,7 @@ def reg_rss_cmd(bot: Bot):
         if not isinstance(msg, PublicMessage):
             return
 
-        # TODO maybe check if valid rss
-
         # no permission
-        ss = msg.channel.id
         perm = await BotUtils.has_admin_and_manage(bot, msg.author_id, msg.guild.id)
         if not perm:
             return
@@ -35,6 +32,7 @@ def reg_rss_cmd(bot: Bot):
             "unsub": un_sub,
             "unsuball": un_sub_all,
             "list": list_subs,
+            "dump": list_all_subs,
         }
         try:
             if args and len(args) > 0:
@@ -57,17 +55,17 @@ def reg_rss_cmd(bot: Bot):
             await rss_help(msg, *args)
             return
 
-        success = await rss_subscribe(msg.channel.id, msg.guild.id, *args)
-        if not success:
+        sub_result = await rss_subscribe(msg.channel.id, msg.guild.id, *args)
+        if not sub_result.success:
             return
 
         url = args[0]
-        feed = await get_feed(url)
+        feed = sub_result.feed
         # Check if the feed was parsed successfully
         if feed.bozo:
             logger.error(f"Feed is bozo {url}. {feed}")
         if feed is None or len(feed.entries) == 0:
-            raise ValueError(f"feed is None or len(feed.entries) == 0")
+            raise ValueError(f"Feed is None or len(feed.entries) == 0")
 
         feed_title = RssUtils.parse_feed_title(feed)
         entry = feed.entries[0]
@@ -104,3 +102,8 @@ def reg_rss_cmd(bot: Bot):
         rss_url_list = await get_rss_list(msg.channel.id)
         encapsule_and_joined = '\n'.join([f'`{string}`' for string in rss_url_list])
         await msg.reply(f"🔖 已订阅列表:\n{encapsule_and_joined}")
+
+    async def list_all_subs(msg: PublicMessage, *args):
+        rss_url_list = await get_all_rss_list()
+        encapsule_and_joined = '\n'.join([f'`{string}`' for string in rss_url_list])
+        await msg.reply(f"🔖 全部订阅列表:\n{encapsule_and_joined}")

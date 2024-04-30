@@ -21,6 +21,12 @@ class BotSettings(BaseSettings):
 
     lock: bool = False
 
+    # Cloudflare Worker URL
+    cf: str = ''
+    cf_enabled: bool = False
+    # Prioritize using Cloudflare Workers or prioritize vanilla and fallback to Cloudflare Workers
+    cf_priority: bool = False
+
     class Config:
         env_file = '.env'
         # allow, ignore, forbid

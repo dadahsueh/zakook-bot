@@ -9,6 +9,8 @@ import feedparser
 import html2text
 import ping3
 
+from bot.configs.bot_config import settings
+
 logger = logging.getLogger(__name__)
 
 
@@ -42,17 +44,29 @@ class RssUtils(object):
 
     @staticmethod
     async def parse_feed_with_retry(url, max_retries=3, retry_delay=1):
+        """
+        Depending on use_cf, retries with fallback on last retry
+        """
+        # Why use with retry if max is 1?
+        max_retries = max(max_retries, 2)
+
         for attempt in range(max_retries):
+            is_last_attempt = attempt == max_retries - 1
             try:
-                feed = feedparser.parse(url)
+                use_cf = settings.cf_enabled and (settings.cf_priority == (not is_last_attempt))
+                if use_cf:
+                    worker_request_url = f'{settings.cf}?url={url}'
+                    feed = feedparser.parse(worker_request_url)
+                else:
+                    feed = feedparser.parse(url)
 
                 if feed is None or len(feed.entries) == 0:
-                    raise ValueError(f"feed is None or len(feed.entries) == 0 for {url}")
+                    raise ValueError(f"Feed is None or len(feed.entries) == 0 for {use_cf} >> {url}")
 
                 return feed
             except Exception as e:
-                logger.info(f"Attempt {attempt + 1} failed: {e}")
-                if attempt < max_retries - 1:
+                logger.debug(f"Attempt {attempt + 1} failed: {e}")
+                if not is_last_attempt:
                     await asyncio.sleep(retry_delay)
 
         raise ValueError(f"All retries failed to parse {url}")
