@@ -29,7 +29,7 @@ class RssUtils(object):
             if ping3.ping(host, timeout=timeout_seconds) is not None:
                 return True
         except Exception as e:
-            raise ValueError(f"Failed to ping {host} {e}")
+            logger.error(f"Failed to ping {host} {e}")
         return False
 
     @staticmethod
