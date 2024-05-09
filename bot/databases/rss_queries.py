@@ -49,16 +49,28 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
                 if feed is None or len(feed.entries) == 0:
                     raise ValueError(f"feed is None or len(feed.entries) == 0")
 
+                # get latest entry date, if no date try get feed update date or feed.feed update date
                 latest_date_parsed = feed.entries[0].get('published_parsed',
                                                          feed.get('updated_parsed',
-                                                                  feed.feed.get('updated_parsed', '')))
+                                                                  feed.feed.get('updated_parsed', None)))
                 if latest_date_parsed is None:
                     raise ValueError(f"latest_date_parsed is None for {sub.url}")
 
-                # check if newer than last_update
-                first_entry_date = datetime.utcfromtimestamp(time.mktime(latest_date_parsed))
+                # latest_date_parsed is utc
+                latest_entry_date = datetime.fromtimestamp(time.mktime(latest_date_parsed))
+
+                # update_date and first_entry_date are both utc
                 # is new
-                if sub.update_date < first_entry_date:
+                if sub.update_date < latest_entry_date:
+                    # iterate and filter feed entries
+                    for i in range(len(feed.entries)):
+                        entry_parsed_date = feed.entries[i].get('published_parsed', feed.get('updated_parsed', feed.feed.get('updated_parsed', None)))
+                        entry_utc_date = datetime.fromtimestamp(time.mktime(entry_parsed_date))
+                        # if entry is older than update date
+                        if sub.update_date > entry_utc_date:
+                            # slice at first old entry, exclusive
+                            feed.entries = feed.entries[:i]
+
                     for channel in sub.kook_channels:
                         channel_id_list.append(channel.channel_id)
                     subs_to_notify[feed] = channel_id_list
@@ -107,6 +119,7 @@ async def get_feed(raw_url):
 class RSSSubscribeResult:
     success: bool
     feed: str
+
 
 async def rss_subscribe(channel_id, guild_id, *args) -> RSSSubscribeResult:
     """

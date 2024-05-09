@@ -119,8 +119,13 @@ class RssUtils(object):
     def parse_date(entry: dict):
         if 'published_parsed' not in entry:
             return ''
-        beijing_utc_timedelta = timedelta(hours=8)
-        entry_date = datetime.utcfromtimestamp(time.mktime(entry['published_parsed'])) + beijing_utc_timedelta
+        # convert utc time to machine local timezone
+        now = datetime.now()
+        current_timezone = now.astimezone().tzinfo
+        utc_offset = current_timezone.utcoffset(now)
+        utc_offset_timedelta = timedelta(seconds=utc_offset.total_seconds())
+        # feedparser parses dates to utc time
+        entry_date = datetime.fromtimestamp(time.mktime(entry['published_parsed'])) + utc_offset_timedelta
         date_format = "%Y-%m-%d %H:%M:%S"
 
         date = entry_date.strftime(date_format)
