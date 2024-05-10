@@ -28,7 +28,8 @@ class BotSettings(BaseSettings):
     # Prioritize using Cloudflare Workers or prioritize vanilla and fallback to Cloudflare Workers
     cf_priority: bool = False
 
-    openai_key: str = ''
+    ai_key: str = ''
+    ai_model: str = 'google/gemini-pro'
 
     class Config:
         env_file = '.env'
@@ -41,8 +42,8 @@ settings = BotSettings()
 riddlesolver_config = configparser.ConfigParser()
 riddlesolver_config.read_dict({
     'openai': {
-        'api_key': settings.openai_key,
-        'model': 'openchat/openchat-7b:free',  # https://openrouter.ai/models
+        'api_key': settings.ai_key,
+        'model': settings.ai_model,  # https://openrouter.ai/models
         'base_url': 'https://openrouter.ai/api/v1'
     },
     'general': {
