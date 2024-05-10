@@ -92,7 +92,7 @@ class SubscribeResult:
 
 async def git_subscribe(channel_id, guild_id, repo_url, update_interval, *args) -> SubscribeResult:
     git_delete_all()
-    if len(settings.openai_key) == 0:
+    if len(settings.ai_key) == 0:
         return SubscribeResult(False, '')
     parsed_url = RssUtils.extract_url(repo_url)
     repo_filter = {}
