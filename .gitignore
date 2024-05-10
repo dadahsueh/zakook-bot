@@ -134,5 +134,5 @@ cython_debug/
 .idea/
 
 # Custom
-/data/
-/logs/
+data/
+logs/

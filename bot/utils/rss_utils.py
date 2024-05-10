@@ -38,8 +38,8 @@ class RssUtils(object):
         try:
             hash_value = hashlib.md5(string_text.encode()).hexdigest()
             # Extract RGB components from the hash value
-            red = int(hash_value[0:2], 16)   # Use first two characters as red component
-            green = int(hash_value[2:4], 16) # Use next two characters as green component
+            red = int(hash_value[0:2], 16)  # Use first two characters as red component
+            green = int(hash_value[2:4], 16)  # Use next two characters as green component
             blue = int(hash_value[4:6], 16)  # Use last two characters as blue component
 
             # Format as hex color code (#RRGGBB)

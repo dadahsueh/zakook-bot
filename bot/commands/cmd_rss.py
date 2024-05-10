@@ -2,14 +2,12 @@
 
 from khl import Bot, Message, MessageTypes, PublicMessage
 
-from bot.configs.bot_config import settings
-from bot.databases.rss_queries import get_all_rss_list, get_feed, get_rss_list, rss_subscribe, rss_unsubscribe
+from bot.databases.rss_queries import get_all_rss_list, get_rss_list, rss_subscribe, rss_unsubscribe
 from bot.messages.card_messages_basic import exception_card_msg, help_card_msg, rss_card_msg_from_entry
 from bot.utils.bot_utils import BotLogger
 from bot.utils.bot_utils import BotUtils
 from bot.utils.rss_utils import RssUtils
 
-bot_settings = settings
 logger = logging.getLogger(__name__)
 cmd_logger = BotLogger(logger)
 
@@ -101,9 +99,9 @@ def reg_rss_cmd(bot: Bot):
     async def list_subs(msg: PublicMessage, *args):
         rss_url_list = await get_rss_list(msg.channel.id)
         encapsule_and_joined = '\n'.join([f'`{string}`' for string in rss_url_list])
-        await msg.reply(f"🔖 已订阅列表:\n{encapsule_and_joined}")
+        await msg.reply(f"🔖 RSS已订阅列表:\n{encapsule_and_joined}")
 
     async def list_all_subs(msg: PublicMessage, *args):
         rss_url_list = await get_all_rss_list()
         encapsule_and_joined = '\n'.join([f'`{string}`' for string in rss_url_list])
-        await msg.reply(f"🔖 全部订阅列表:\n{encapsule_and_joined}")
+        await msg.reply(f"🔖 RSS全部订阅列表:\n{encapsule_and_joined}")

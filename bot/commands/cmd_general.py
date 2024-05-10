@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 cmd_logger = BotLogger(logger)
 
 
-def reg_basic_cmd(bot: Bot):
+def reg_general_cmd(bot: Bot):
     @bot.command(name='help', case_sensitive=False)
     async def cmd_help(msg: Message):
         if not isinstance(msg, PublicMessage):

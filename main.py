@@ -8,7 +8,6 @@ from khl import Bot
 from bot.commands import reg_cmds
 from bot.configs.bot_config import settings
 from bot.tasks import reg_tasks
-from bot.utils.rss_utils import RssUtils
 
 
 def debugger_is_active() -> bool:

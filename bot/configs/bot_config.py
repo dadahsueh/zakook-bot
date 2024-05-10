@@ -1,4 +1,5 @@
-﻿from typing import List
+﻿import configparser
+from typing import List
 
 from pydantic_settings import BaseSettings
 
@@ -27,6 +28,8 @@ class BotSettings(BaseSettings):
     # Prioritize using Cloudflare Workers or prioritize vanilla and fallback to Cloudflare Workers
     cf_priority: bool = False
 
+    openai_key: str = ''
+
     class Config:
         env_file = '.env'
         # allow, ignore, forbid
@@ -34,3 +37,19 @@ class BotSettings(BaseSettings):
 
 
 settings = BotSettings()
+
+riddlesolver_config = configparser.ConfigParser()
+riddlesolver_config.read_dict({
+    'openai': {
+        'api_key': settings.openai_key,
+        'model': 'openchat/openchat-7b:free',  # https://openrouter.ai/models
+        'base_url': 'https://openrouter.ai/api/v1'
+    },
+    'general': {
+        'cache_dir': '~/.cache/repo_cache',
+        'cache_duration': '7'
+    },
+    'github': {
+        'access_token': '',
+    },
+})

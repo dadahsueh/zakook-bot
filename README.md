@@ -160,6 +160,7 @@ Also also try `-cf https://xxxworker.xxxname.workers.dev/` to configure a [Cloud
 - [khl.py: Python SDK for KOOK API](https://github.com/TWT233/khl.py)
 - [Kook-Source-Query Bot](https://github.com/NyaaaDoge/kook-source-query)
 - [Kyouka 镜华 点歌机器人](https://github.com/shuyangzhang/Kyouka/)
+- [RiddleSolver: Git Summary](https://github.com/Anomalybound/riddlesolver)
 
 ## 💭 Resources <a name = "resources"></a>
 
@@ -168,3 +169,4 @@ Also also try `-cf https://xxxworker.xxxname.workers.dev/` to configure a [Cloud
 - [Emojisearch](https://www.emojisearch.app/)
 - [Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
 - [RSSHub 万物皆可 RSS](https://docs.rsshub.app/zh/)
+- [SQLAlchemy async](https://qiita.com/y_p_e/items/0545f71b485b504494d4)

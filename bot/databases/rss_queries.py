@@ -6,13 +6,11 @@ from typing import List
 
 from feedparser import FeedParserDict
 
-from bot.databases.rss_schema import RSSKookChannel, RSSSubscription
-from bot.databases.sql import get_session
-from bot.utils.bot_utils import BotLogger
+from bot.databases.rss_db import get_session
+from bot.databases.rss_schemas import RSSKookChannel, RSSSubscription
 from bot.utils.rss_utils import RssUtils
 
 logger = logging.getLogger(__name__)
-cmd_logger = BotLogger(logger)
 
 """
 This module contains all RSS queries
@@ -31,9 +29,10 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
     """
     Could have SQLite concurrency issues, very slow
     """
+    current_date = datetime.now(timezone.utc)
+    subs_to_notify = {}
+
     with get_session() as session:
-        current_date = datetime.now(timezone.utc)
-        subs_to_notify = {}
         # all rss subscriptions
         rss_subs = session.query(RSSSubscription).all()
         for sub in rss_subs:
@@ -64,7 +63,10 @@ async def get_subs_to_notify() -> dict[FeedParserDict:List[str]]:
                 if sub.update_date < latest_entry_date:
                     # iterate and filter feed entries
                     for i in range(len(feed.entries)):
-                        entry_parsed_date = feed.entries[i].get('published_parsed', feed.get('updated_parsed', feed.feed.get('updated_parsed', None)))
+                        entry_parsed_date = feed.entries[i].get('published_parsed', feed.get('updated_parsed',
+                                                                                             feed.feed.get(
+                                                                                                 'updated_parsed',
+                                                                                                 None)))
                         entry_utc_date = datetime.fromtimestamp(time.mktime(entry_parsed_date))
                         # if entry is older than update date
                         if sub.update_date > entry_utc_date:
@@ -188,6 +190,7 @@ async def rss_unsubscribe(channel_id, *args) -> bool:
         if channel is None:
             return False
 
+        dirty = False
         rss_remove_list = []
         unsubscribe_list = []
         for arg in args:
@@ -201,11 +204,16 @@ async def rss_unsubscribe(channel_id, *args) -> bool:
                 rss_remove_list.append(rss)
 
         for rss in rss_remove_list:
+            dirty = True
             channel.rss_subs.remove(rss)
             if len(rss.kook_channels) == 0:
                 session.delete(rss)
 
-        if len(rss_remove_list) != 0:
+        if len(channel.rss_subs) == 0:
+            dirty = True
+            session.delete(channel)
+
+        if dirty:
             session.commit()
             return True
 
